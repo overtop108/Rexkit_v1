@@ -135,7 +135,7 @@ onUpdatePost(postIndex, { image_url: imageUrl });
                 {onUpdatePost && (
                   <button
                     onClick={() => {
-  console.log('Clicked day:', post.day, 'Post ID:', post.id, 'Full post:', post);
+  console.log('Clicked day:', post.day, 'Full post:', post);
   handleGenerateImage(post);
 }}
                     disabled={generatingImageForDay === idx}

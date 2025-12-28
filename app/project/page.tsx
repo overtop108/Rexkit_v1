@@ -309,6 +309,54 @@ export default function ProjectPage() {
     setShowLandingPageSuccess(false);
   }, [activeSection]);
 
+  useEffect(() => {
+    if (twitterContent && generationId && user) {
+      const parsedPosts = parseTwitterPosts(twitterContent);
+      if (parsedPosts.length > 0 && (twitterPosts.length === 0 || twitterPosts.length !== parsedPosts.length)) {
+        const mergedPosts = parsedPosts.map(parsedPost => {
+          const existingPost = twitterPosts.find(p => p.day === parsedPost.day);
+          return existingPost ? { ...parsedPost, image_url: existingPost.image_url } : parsedPost;
+        });
+        setTwitterPosts(mergedPosts);
+
+        supabase
+          .from('generations')
+          .update({
+            twitter_posts: mergedPosts,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', generationId)
+          .then(({ error }) => {
+            if (error) console.error('Error saving Twitter posts:', error);
+          });
+      }
+    }
+  }, [twitterContent, generationId, user]);
+
+  useEffect(() => {
+    if (instagramContent && generationId && user) {
+      const parsedPosts = parseInstagramPosts(instagramContent);
+      if (parsedPosts.length > 0 && (instagramPosts.length === 0 || instagramPosts.length !== parsedPosts.length)) {
+        const mergedPosts = parsedPosts.map(parsedPost => {
+          const existingPost = instagramPosts.find(p => p.day === parsedPost.day);
+          return existingPost ? { ...parsedPost, image_url: existingPost.image_url } : parsedPost;
+        });
+        setInstagramPosts(mergedPosts);
+
+        supabase
+          .from('generations')
+          .update({
+            instagram_posts: mergedPosts,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', generationId)
+          .then(({ error }) => {
+            if (error) console.error('Error saving Instagram posts:', error);
+          });
+      }
+    }
+  }, [instagramContent, generationId, user]);
+
   const loadProject = async () => {
     if (!projectId || !user) return;
 
@@ -335,6 +383,8 @@ export default function ProjectPage() {
       setCompetitiveEdgeContent(data.competitive_edge || '');
       setLandingPageHtml(data.landing_page_html || '');
       setRoadmapChecklistState(data.roadmap_checklist_state || {});
+      setTwitterPosts(data.twitter_posts || []);
+      setInstagramPosts(data.instagram_posts || []);
 
       if (!data.project_name && data.business_idea) {
         const autoName = data.business_idea.substring(0, 50).trim();
@@ -831,20 +881,48 @@ export default function ProjectPage() {
     }
   };
 
-  const handleUpdateTwitterPost = (index: number, updates: Partial<TwitterPost>) => {
-  setTwitterPosts(prevPosts =>
-    prevPosts.map((post, idx) =>
+  const handleUpdateTwitterPost = async (index: number, updates: Partial<TwitterPost>) => {
+    const updatedPosts = twitterPosts.map((post, idx) =>
       idx === index ? { ...post, ...updates } : post
-    )
-  );
-};
-
-  const handleUpdateInstagramPost = (day: number, updates: Partial<InstagramPost>) => {
-    setInstagramPosts(prevPosts =>
-      prevPosts.map(post =>
-        post.day === day ? { ...post, ...updates } : post
-      )
     );
+
+    setTwitterPosts(updatedPosts);
+
+    if (generationId && user) {
+      try {
+        await supabase
+          .from('generations')
+          .update({
+            twitter_posts: updatedPosts,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', generationId);
+      } catch (error) {
+        console.error('Error updating Twitter posts:', error);
+      }
+    }
+  };
+
+  const handleUpdateInstagramPost = async (day: number, updates: Partial<InstagramPost>) => {
+    const updatedPosts = instagramPosts.map(post =>
+      post.day === day ? { ...post, ...updates } : post
+    );
+
+    setInstagramPosts(updatedPosts);
+
+    if (generationId && user) {
+      try {
+        await supabase
+          .from('generations')
+          .update({
+            instagram_posts: updatedPosts,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', generationId);
+      } catch (error) {
+        console.error('Error updating Instagram posts:', error);
+      }
+    }
   };
 
   const handleDownloadImage = async (imageUrl: string, filename: string) => {
