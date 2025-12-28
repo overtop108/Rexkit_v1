@@ -831,13 +831,13 @@ export default function ProjectPage() {
     }
   };
 
-  const handleUpdateTwitterPost = (day: number, updates: Partial<TwitterPost>) => {
-    setTwitterPosts(prevPosts =>
-      prevPosts.map(post =>
-        post.day === day ? { ...post, ...updates } : post
-      )
-    );
-  };
+  const handleUpdateTwitterPost = (index: number, updates: Partial<TwitterPost>) => {
+  setTwitterPosts(prevPosts =>
+    prevPosts.map((post, idx) =>
+      idx === index ? { ...post, ...updates } : post
+    )
+  );
+};
 
   const handleUpdateInstagramPost = (day: number, updates: Partial<InstagramPost>) => {
     setInstagramPosts(prevPosts =>
