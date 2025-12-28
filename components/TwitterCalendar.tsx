@@ -131,7 +131,10 @@ export function TwitterCalendar({ posts, onUpdatePost }: TwitterCalendarProps) {
 
                 {onUpdatePost && (
                   <button
-                    onClick={() => handleGenerateImage(post)}
+                    onClick={() => {
+  console.log('Clicked day:', post.day, 'Post ID:', post.id, 'Full post:', post);
+  handleGenerateImage(post);
+}}
                     disabled={generatingImageForDay === post.day}
                     className="w-full flex items-center justify-center gap-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 px-2 rounded transition-colors disabled:opacity-50"
                   >
