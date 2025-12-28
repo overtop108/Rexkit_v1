@@ -27,7 +27,8 @@ export function TwitterCalendar({ posts, onUpdatePost }: TwitterCalendarProps) {
   const handleGenerateImage = async (post: TwitterPost) => {
     if (!onUpdatePost) return;
 
-    setGeneratingImageForDay(post.day);
+    const postIndex = posts.findIndex(p => p === post);
+setGeneratingImageForDay(postIndex);
     try {
       const prompt = `Social media graphic for Twitter, modern SaaS marketing style, bold colors, professional, clean design. No text on image. Topic: ${post.copy.substring(0, 100)}. Landscape 16:9 format.`;
 
@@ -137,7 +138,7 @@ onUpdatePost(postIndex, { image_url: imageUrl });
   console.log('Clicked day:', post.day, 'Post ID:', post.id, 'Full post:', post);
   handleGenerateImage(post);
 }}
-                    disabled={generatingImageForDay === post.day}
+                    disabled={generatingImageForDay === idx}
                     className="w-full flex items-center justify-center gap-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 px-2 rounded transition-colors disabled:opacity-50"
                   >
                     {generatingImageForDay === post.day ? (
