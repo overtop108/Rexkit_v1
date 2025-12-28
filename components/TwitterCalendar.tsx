@@ -141,7 +141,7 @@ onUpdatePost(postIndex, { image_url: imageUrl });
                     disabled={generatingImageForDay === idx}
                     className="w-full flex items-center justify-center gap-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 px-2 rounded transition-colors disabled:opacity-50"
                   >
-                    {generatingImageForDay === post.day ? (
+                    {generatingImageForDay === idx ? (
                       <>
                         <Loader2 className="h-3 w-3 animate-spin" />
                         <span>Generating...</span>
