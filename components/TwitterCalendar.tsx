@@ -56,7 +56,7 @@ export function TwitterCalendar({ posts, onUpdatePost }: TwitterCalendarProps) {
         console.log('Twitter - Setting image URL:', imageUrl);
         // Find the actual index of this post in the array
 const postIndex = posts.findIndex(p => p === post);
-onUpdatePost(postIndex + 1, { image_url: imageUrl });
+onUpdatePost(postIndex, { image_url: imageUrl });
       }
     } catch (error) {
       console.error('Error generating image:', error);
