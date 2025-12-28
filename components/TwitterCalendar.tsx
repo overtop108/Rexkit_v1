@@ -98,7 +98,7 @@ onUpdatePost(postIndex + 1, { image_url: imageUrl });
       <div className="bg-white rounded-lg border border-slate-200 p-4">
         <div className="grid grid-cols-7 gap-3">
 {posts.slice(0, 7).map((post, idx) => (
-  <div key={`day-${idx}`} className="space-y-2">
+  <div key={`twitter-day-${idx}`} className="space-y-2">
               <div className="text-center text-xs font-semibold text-slate-600">
                 {weekDays[idx]}
               </div>
