@@ -1,12 +1,13 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Source_Sans_3, JetBrains_Mono } from 'next/font/google';
 import { Providers } from '@/components/Providers';
 
-const inter = Inter({
+const sourceSans3 = Source_Sans_3({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -45,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${sourceSans3.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans">
         <Providers>{children}</Providers>
       </body>
